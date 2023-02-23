@@ -1,22 +1,17 @@
 import { Role } from '../lib/constants'
 import pkg, { Types } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import { IUser } from './User'
 const { Schema, model, SchemaTypes } = pkg
 
 interface IPost {
 	description: string
-	owner: IUser
+	author: Types.ObjectId
 }
 
 const postSchema = new Schema<IPost>(
 	{
 		description: { type: String, default: '' },
-		owner: {
-			type: SchemaTypes.ObjectId,
-			ref: 'user',
-			required: true,
-		},
+		author: { type: SchemaTypes.ObjectId, required: true },
 	},
 	{
 		versionKey: false,

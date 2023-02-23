@@ -5,6 +5,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 import { HttpCode, LIMIT_JSON } from './lib/constants'
 
+import authRouter from './routes/auth'
+import usersRouter from './routes/users'
+
 const app = express()
 
 app.use(helmet())
@@ -15,12 +18,8 @@ app.use(cors())
 
 //routing
 
-app.use('/', async (req, res, next) => {
-	res.send('Hello')
-})
-// app.use('/api/auth', authRouter)
-// app.use('/api/users', usersRouter)
-// app.use('/api/pet', petRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
 
 //error handlers
 

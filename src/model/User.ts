@@ -1,21 +1,11 @@
 import { Role } from '../lib/constants'
-import pkg, { Types } from 'mongoose'
+import { Types, Schema, model } from 'mongoose'
 import bcrypt from 'bcryptjs'
-const { Schema, model } = pkg
-
-export interface IUser {
-	name: string
-	email: string
-	password: string
-	token: string | null
-	friends: Types.ObjectId[]
-	incomingFriendsRequests: Types.ObjectId[]
-	outputFriendsRequests: Types.ObjectId[]
-}
+import { IUser } from '../types/user'
 
 const userSchema = new Schema<IUser>(
 	{
-		name: { type: String, default: 'Guest' },
+		name: { type: String, required: [true, 'Set  user name'] },
 		email: {
 			type: String,
 			require: [true, 'Set email for user'],
@@ -28,9 +18,9 @@ const userSchema = new Schema<IUser>(
 		},
 		password: { type: String, require: [true, 'Set password for user'] },
 		token: { type: String, default: null },
-		friends: { type: [Types.ObjectId], default: [] },
-		incomingFriendsRequests: { type: [Types.ObjectId], default: [] },
-		outputFriendsRequests: { type: [Types.ObjectId], default: [] },
+		friends: { type: [String], default: [] },
+		incomingFriendsRequests: { type: [String], default: [] },
+		outputFriendsRequests: { type: [String], default: [] },
 	},
 	{
 		versionKey: false,
@@ -55,12 +45,10 @@ userSchema.pre('save', async function (next) {
 	next()
 })
 
-//  custom method
+userSchema.method('isValidPassword', function isValidPassword(password: string) {
+	return bcrypt.compare(password, this.password)
+})
 
-userSchema.methods.isValidPassword = async function (password: string) {
-	return await bcrypt.compare(password, this.password)
-}
-
-const User = model('user', userSchema)
+const User = model<IUser>('user', userSchema)
 
 export default User
