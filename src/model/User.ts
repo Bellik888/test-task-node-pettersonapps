@@ -6,6 +6,7 @@ import { IUser } from '../types/user'
 const userSchema = new Schema<IUser>(
 	{
 		name: { type: String, required: [true, 'Set  user name'] },
+		nickname: { type: String, default: null },
 		email: {
 			type: String,
 			require: [true, 'Set email for user'],

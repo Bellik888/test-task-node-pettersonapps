@@ -44,4 +44,8 @@ const setToken = async (id: string, token: string) => {
 	await repositoryUsers.updateToken(id, token)
 }
 
-export default { createUser, isUserExist, getUser, getToken, setToken }
+const removeToken = async (id: string) => {
+	await repositoryUsers.removeToken(id)
+}
+
+export default { createUser, isUserExist, getUser, getToken, setToken, removeToken }

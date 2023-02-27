@@ -5,10 +5,7 @@ set('strictQuery', false)
 
 const uri = process.env.URI_DB || ''
 
-const db = connect(uri, {
-	// useNewUrlParser: true,
-	// useUnifiedTopology: true,
-})
+const db = connect(uri, {})
 
 connection.on('connected', () => {
 	console.log('Mongoose connected to DB')

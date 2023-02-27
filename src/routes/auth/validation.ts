@@ -4,7 +4,8 @@ import { HttpCode } from '../../lib/constants'
 
 const registerSchema = Joi.object({
 	email: Joi.string().email().required(),
-	name: Joi.string().required(),
+	name: Joi.string().min(3).max(20).required(),
+	nickname: Joi.string().min(3).max(20).optional(),
 	password: Joi.string().alphanum().min(8).max(15).required(),
 })
 
@@ -26,7 +27,6 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
 	try {
 		await loginSchema.validateAsync(req.body)
 	} catch (error: any) {
-		console.log(error)
 		const { email, password } = req.body
 		if (!email || !password)
 			return res.status(HttpCode.UNAUTHORIZED).json({ message: `Field ${error.message.replace(/"/g, '')}` })

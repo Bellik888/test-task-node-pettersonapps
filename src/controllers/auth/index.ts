@@ -46,4 +46,26 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
-export { registration, login }
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const { email, password } = req.body
+		const user = await authService.getUser(email, password)
+
+		if (!user) {
+			return res
+				.status(HttpCode.UNAUTHORIZED)
+				.json({ status: 'error', code: HttpCode.UNAUTHORIZED, message: 'Invalid credentials' })
+		}
+		await authService.removeToken(user.id)
+
+		res.status(HttpCode.OK).json({
+			status: 'success',
+			code: HttpCode.OK,
+			message: 'SUCCESS',
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+export { registration, login, logout }

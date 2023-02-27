@@ -7,19 +7,22 @@ import { HttpCode, LIMIT_JSON } from './lib/constants'
 
 import authRouter from './routes/auth'
 import usersRouter from './routes/users'
+import postsRouter from './routes/posts'
+import commentsRouter from './routes/comments'
 
 const app = express()
 
 app.use(helmet())
 app.use(express.json({ limit: LIMIT_JSON }))
-// app.use(express.urlencoded({ extended: true })) //parse formData
-app.use(morgan('tiny')) //logger
+app.use(morgan('tiny'))
 app.use(cors())
 
 //routing
 
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/post', postsRouter)
+app.use('/api/comment', commentsRouter)
 
 //error handlers
 

@@ -1,6 +1,4 @@
-import { Role } from '../lib/constants'
 import pkg, { Types } from 'mongoose'
-import bcrypt from 'bcryptjs'
 const { Schema, model, SchemaTypes } = pkg
 
 interface IPost {
@@ -10,7 +8,7 @@ interface IPost {
 
 const postSchema = new Schema<IPost>(
 	{
-		description: { type: String, default: '' },
+		description: { type: String, default: '', required: true },
 		author: { type: SchemaTypes.ObjectId, required: true },
 	},
 	{
@@ -20,7 +18,6 @@ const postSchema = new Schema<IPost>(
 			virtuals: true,
 			transform: (doc, ret) => {
 				delete ret._id
-				delete ret.owner
 
 				return ret
 			},

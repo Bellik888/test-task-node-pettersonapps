@@ -1,6 +1,9 @@
 import { IUser } from './../types/user'
-import { Types } from 'mongoose'
 import User from '../model/User'
+
+type findByQuery = {
+	[index: string]: string
+}
 
 const findByEmail = async (email: string) => {
 	return await User.findOne({ email })
@@ -13,6 +16,10 @@ const updateToken = async (id: string, token: string) => {
 	return await User.updateOne({ _id: id }, { token })
 }
 
+const removeToken = async (id: string) => {
+	return await User.updateOne({ _id: id }, { token: null })
+}
+
 const isFriendAlreadyInField = async (userId: string, friendId: string, field: string) => {
 	const user = await User.findOne({ _id: userId })
 	if (user?.get(field)?.includes(friendId)) {
@@ -21,7 +28,9 @@ const isFriendAlreadyInField = async (userId: string, friendId: string, field: s
 }
 
 const getFriends = async (user: IUser) => {
-	return await User.find({ _id: { $in: user.friends } })
+	const friends = await User.find({ _id: { $in: user.friends } })
+	const total = await User.find({ _id: { $in: user.friends } }).countDocuments()
+	return { total, friends }
 }
 
 const sendFriendRequest = async (userId: string, friendId: string) => {
@@ -72,9 +81,17 @@ const deleteFriend = async (userId: string, friendId: string) => {
 	}
 }
 
+const findUserBy = async (user: IUser, query: findByQuery) => {
+	const users = await User.find({ _id: { $ne: user.id }, ...query })
+	const total = await User.find({ _id: { $ne: user.id }, ...query }).countDocuments()
+
+	return { total, users }
+}
+
 export default {
 	findByEmail,
 	updateToken,
+	removeToken,
 	findById,
 	getFriends,
 	sendFriendRequest,
@@ -82,4 +99,5 @@ export default {
 	isFriendAlreadyInField,
 	rejectFriendsRequest,
 	deleteFriend,
+	findUserBy,
 }

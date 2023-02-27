@@ -4,8 +4,8 @@ import { IGetUserAuthInfoRequest } from '../../types/expressTypes'
 import userRepository from '../../repository/user'
 
 const getUser = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const { name, friends, incomingFriendsRequests, outputFriendsRequests, id } = req.user || {}
-	const user = { name, friends, incomingFriendsRequests, outputFriendsRequests, id }
+	const { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname } = req.user || {}
+	const user = { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname }
 
 	if (!user) {
 		return res
@@ -14,6 +14,39 @@ const getUser = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFu
 	}
 
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { user: user } })
+}
+
+const findUserBy = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
+	const user = req.user
+
+	if (!user) {
+		return res
+			.status(HttpCode.UNAUTHORIZED)
+			.json({ status: 'error', code: HttpCode.UNAUTHORIZED, message: 'Invalid credentials' })
+	}
+
+	const { name, nickname } = req.body
+
+	if (name && nickname) {
+		return res
+			.status(HttpCode.BAD_REQUEST)
+			.json({ status: 'error', code: HttpCode.BAD_REQUEST, message: 'Only name or nickname' })
+	}
+	if (!name && !nickname) {
+	}
+
+	const result = await userRepository.findUserBy(user, req.body)
+
+	if (!result) {
+		return res.status(HttpCode.NOT_FOUND).json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'NOT FOUND' })
+	}
+
+	const users = result.users.map(friend => {
+		const { id, name, friends, nickname } = friend
+		return { id, name, friends, nickname }
+	})
+
+	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { total: result.total, users } })
 }
 
 const getFriends = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
@@ -25,18 +58,18 @@ const getFriends = async (req: IGetUserAuthInfoRequest, res: Response, next: Nex
 			.json({ status: 'error', code: HttpCode.UNAUTHORIZED, message: 'Invalid credentials' })
 	}
 
-	const friends = await userRepository.getFriends(user)
+	const result = await userRepository.getFriends(user)
 
-	if (!friends) {
+	if (!result) {
 		return res.status(HttpCode.NOT_FOUND).json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'NOT FOUND' })
 	}
 
-	const response = friends.map(friend => {
+	const friends = result.friends.map(friend => {
 		const { id, name, friends } = friend
 		return { id, name, friends }
 	})
 
-	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { friends: response } })
+	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { total: result.total, friends } })
 }
 
 const sendFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
@@ -119,6 +152,7 @@ const rejectFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response,
 
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, message: 'success' })
 }
+
 const deleteFriend = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
 	const user = req.user
 	const { id: friendId } = req.params
@@ -144,4 +178,12 @@ const deleteFriend = async (req: IGetUserAuthInfoRequest, res: Response, next: N
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, message: 'success' })
 }
 
-export { getUser, getFriends, confirmFriendsRequest, sendFriendsRequest, rejectFriendsRequest, deleteFriend }
+export {
+	getUser,
+	getFriends,
+	confirmFriendsRequest,
+	sendFriendsRequest,
+	rejectFriendsRequest,
+	deleteFriend,
+	findUserBy,
+}

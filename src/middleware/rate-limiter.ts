@@ -5,8 +5,8 @@ const limiter = (duration: number, limit: number) => {
 	return rateLimit({
 		windowMs: duration,
 		max: limit,
-		standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-		legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+		standardHeaders: true,
+		legacyHeaders: false,
 		handler: (req, res, next) => {
 			return res.status(HttpCode.TOO_MANY_REQUESTS).json({
 				status: 'error',

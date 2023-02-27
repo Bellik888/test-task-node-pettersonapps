@@ -1,5 +1,8 @@
 export const MIN_AGE = 14
 export const MAX_AGE = 75
+export const LIMIT_JSON = 5000
+export const FRIENDS_POSTS_LIMIT = 20
+export const FRIENDS_POSTS_SKIP = 0
 
 export const HttpCode = {
 	OK: 200,
@@ -19,7 +22,5 @@ export const Role = {
 	ADMIN: 'administrator',
 	USER: 'user',
 }
-
-export const LIMIT_JSON = 5000
 
 export const CLOUD_FOLDER_AVATARS = 'Avatars'

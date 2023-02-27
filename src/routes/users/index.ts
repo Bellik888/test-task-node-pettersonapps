@@ -6,18 +6,21 @@ import {
 	rejectFriendsRequest,
 	deleteFriend,
 	getFriends,
+	findUserBy,
 } from '../../controllers/users/'
 
 import guard from '../../middleware/guard'
-import { validateID } from './validation'
+import { validateID, validateFindBy } from './validation'
 
 const router = Router()
 
 router.get('/', guard, getUser)
-router.get('/getAllFriends', guard, getFriends)
-router.post('/sendRequest/:id', guard, validateID, sendFriendsRequest)
-router.post('/confirmRequest/:id', guard, validateID, confirmFriendsRequest)
-router.post('/rejectRequest/:id', guard, validateID, rejectFriendsRequest)
-router.delete('/deleteFriend/:id', guard, validateID, deleteFriend)
+router.get('/all-friends', guard, getFriends)
+router.post('/send-request/:id', guard, validateID, sendFriendsRequest)
+router.post('/confirm-request/:id', guard, validateID, confirmFriendsRequest)
+router.post('/reject-request/:id', guard, validateID, rejectFriendsRequest)
+router.delete('/delete-friend/:id', guard, validateID, deleteFriend)
+
+router.get('/find-by', guard, validateFindBy, findUserBy)
 
 export default router

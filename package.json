@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"main": "dist/index.js",
 	"scripts": {
+		"start": " node -r dotenv/config --watch '*.ts' --exec ts-node src/bin/server.ts",
 		"dev": "nodemon -r dotenv/config --watch '*.ts' --exec ts-node src/bin/server.ts"
 	},
 	"author": "",
