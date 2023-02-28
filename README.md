@@ -5,5 +5,3 @@ Postman API documentation : https://documenter.getpostman.com/view/19249113/2s93
 to start:
 1.npm install
 2.npm run dev
-
-test
