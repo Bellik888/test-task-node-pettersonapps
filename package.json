@@ -1,10 +1,12 @@
 {
 	"name": "test-ts",
 	"version": "1.0.0",
-	"main": "dist/index.js",
+	"main": "dist/app.js",
 	"scripts": {
-		"start": " node -r dotenv/config --watch '*.ts' --exec ts-node src/bin/server.ts",
-		"dev": "nodemon -r dotenv/config --watch '*.ts' --exec ts-node src/bin/server.ts"
+		"start": "node -r dotenv/config dist/bin/index.js",
+		"dev": "nodemon -r dotenv/config --watch '*.ts' --exec ts-node src/bin/index.ts",
+		"prebuild": "rimraf dist & rimraf node_modules & npm install",
+		"build": "tsc"
 	},
 	"author": "",
 	"license": "ISC",
@@ -21,7 +23,8 @@
 		"joi": "^17.8.3",
 		"jsonwebtoken": "^9.0.0",
 		"mongoose": "^6.9.2",
-		"morgan": "^1.10.0"
+		"morgan": "^1.10.0",
+		"rimraf": "^4.1.2"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.13",

@@ -1,4 +1,4 @@
-import app from '../index'
+import app from '../app'
 import db from '../lib/db'
 
 const PORT = process.env.PORT || 8081
