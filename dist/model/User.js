@@ -26,7 +26,7 @@ const userSchema = new mongoose_1.Schema({
             return re.test(String(value).trim().toLocaleLowerCase());
         },
     },
-    password: { type: String, require: [true, 'Set password for user'] },
+    password: { type: String, default: null },
     token: { type: String, default: null },
     friends: { type: [String], default: [] },
     incomingFriendsRequests: { type: [String], default: [] },

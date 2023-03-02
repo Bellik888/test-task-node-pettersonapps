@@ -17,7 +17,7 @@ const userSchema = new Schema<IUser>(
 				return re.test(String(value).trim().toLocaleLowerCase())
 			},
 		},
-		password: { type: String, require: [true, 'Set password for user'] },
+		password: { type: String, default: null },
 		token: { type: String, default: null },
 		friends: { type: [String], default: [] },
 		incomingFriendsRequests: { type: [String], default: [] },

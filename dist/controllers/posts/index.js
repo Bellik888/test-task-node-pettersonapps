@@ -16,7 +16,7 @@ exports.getAllFriendsPosts = exports.deletePost = exports.updatePost = exports.c
 const constants_1 = require("../../lib/constants");
 const posts_1 = __importDefault(require("../../repository/posts"));
 const createPost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const post = req.body.post;
     if (!user) {
         return res
@@ -36,7 +36,7 @@ const createPost = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.createPost = createPost;
 const updatePost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id } = req.params;
     if (!user) {
         return res
@@ -57,7 +57,7 @@ const updatePost = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.updatePost = updatePost;
 const deletePost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id } = req.params;
     if (!user) {
         return res
@@ -76,7 +76,7 @@ const deletePost = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.deletePost = deletePost;
 const getAllFriendsPosts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     if (!user) {
         return res
             .status(constants_1.HttpCode.UNAUTHORIZED)

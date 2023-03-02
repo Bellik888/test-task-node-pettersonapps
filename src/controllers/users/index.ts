@@ -1,10 +1,10 @@
 import { NextFunction, Response, Request } from 'express'
 import { HttpCode } from '../../lib/constants'
-import { IGetUserAuthInfoRequest } from '../../types/expressTypes'
+
 import userRepository from '../../repository/user'
 
-const getUser = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname } = req.user || {}
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+	const { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname } = res.locals.user
 	const user = { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname }
 
 	if (!user) {
@@ -16,8 +16,8 @@ const getUser = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFu
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { user: user } })
 }
 
-const findUserBy = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const findUserBy = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 
 	if (!user) {
 		return res
@@ -49,8 +49,8 @@ const findUserBy = async (req: IGetUserAuthInfoRequest, res: Response, next: Nex
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { total: result.total, users } })
 }
 
-const getFriends = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const getFriends = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 
 	if (!user) {
 		return res
@@ -72,8 +72,8 @@ const getFriends = async (req: IGetUserAuthInfoRequest, res: Response, next: Nex
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { total: result.total, friends } })
 }
 
-const sendFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const sendFriendsRequest = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id: friendId } = req.params
 
 	if (!user) {
@@ -100,8 +100,8 @@ const sendFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response, n
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, message: 'success' })
 }
 
-const confirmFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const confirmFriendsRequest = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id: friendId } = req.params
 
 	if (!user) {
@@ -126,8 +126,8 @@ const confirmFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, message: 'success' })
 }
 
-const rejectFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const rejectFriendsRequest = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id: friendId } = req.params
 
 	if (!user) {
@@ -153,8 +153,8 @@ const rejectFriendsRequest = async (req: IGetUserAuthInfoRequest, res: Response,
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, message: 'success' })
 }
 
-const deleteFriend = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const deleteFriend = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id: friendId } = req.params
 
 	if (!user) {
