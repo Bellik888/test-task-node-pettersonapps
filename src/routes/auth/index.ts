@@ -1,9 +1,5 @@
 import { Router } from 'express'
-import {
-	registration,
-	login,
-	logout
-} from '../../controllers/auth'
+import { registration, login, logout } from '../../controllers/auth'
 import guard from '../../middleware/guard'
 import limiter from '../../middleware/rate-limiter'
 import { validateRegistration, validateLogin } from './validation'

@@ -16,7 +16,7 @@ exports.findUserBy = exports.deleteFriend = exports.rejectFriendsRequest = expor
 const constants_1 = require("../../lib/constants");
 const user_1 = __importDefault(require("../../repository/user"));
 const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname } = req.user || {};
+    const { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname } = res.locals.user;
     const user = { name, friends, incomingFriendsRequests, outputFriendsRequests, id, nickname };
     if (!user) {
         return res
@@ -27,7 +27,7 @@ const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getUser = getUser;
 const findUserBy = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     if (!user) {
         return res
             .status(constants_1.HttpCode.UNAUTHORIZED)
@@ -53,7 +53,7 @@ const findUserBy = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.findUserBy = findUserBy;
 const getFriends = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     if (!user) {
         return res
             .status(constants_1.HttpCode.UNAUTHORIZED)
@@ -71,7 +71,7 @@ const getFriends = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.getFriends = getFriends;
 const sendFriendsRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id: friendId } = req.params;
     if (!user) {
         return res
@@ -94,7 +94,7 @@ const sendFriendsRequest = (req, res, next) => __awaiter(void 0, void 0, void 0,
 });
 exports.sendFriendsRequest = sendFriendsRequest;
 const confirmFriendsRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id: friendId } = req.params;
     if (!user) {
         return res
@@ -115,7 +115,7 @@ const confirmFriendsRequest = (req, res, next) => __awaiter(void 0, void 0, void
 });
 exports.confirmFriendsRequest = confirmFriendsRequest;
 const rejectFriendsRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id: friendId } = req.params;
     if (!user) {
         return res
@@ -136,7 +136,7 @@ const rejectFriendsRequest = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.rejectFriendsRequest = rejectFriendsRequest;
 const deleteFriend = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id: friendId } = req.params;
     if (!user) {
         return res

@@ -1,6 +1,5 @@
 import { IUser } from './../types/user'
-import { IGetUserAuthInfoRequest } from './../types/expressTypes'
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
 import { HttpCode } from '../lib/constants'
 
@@ -23,7 +22,7 @@ const verifyToken = (token: string) => {
 	}
 }
 
-const guard = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
+const guard = async (req: Request, res: Response, next: NextFunction) => {
 	const token = req.get('authorization')?.split(' ')[1]
 
 	if (!token) {
@@ -50,7 +49,9 @@ const guard = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunc
 			.json({ status: 'error', code: HttpCode.UNAUTHORIZED, message: 'Not authorized' })
 	}
 
-	req.user = user
+	// res.locals.user = user
+
+	res.locals.user = user
 
 	next()
 }

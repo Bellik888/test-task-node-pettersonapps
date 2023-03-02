@@ -1,11 +1,10 @@
-import { NextFunction, Response } from 'express'
+import { NextFunction, Response, Request } from 'express'
 import { HttpCode } from '../../lib/constants'
 
 import commentRepository from '../../repository/comments'
-import { IGetUserAuthInfoRequest } from '../../types/expressTypes'
 
-const createComment = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const createComment = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { comment, postId } = req.body
 
 	if (!user) {
@@ -26,8 +25,8 @@ const createComment = async (req: IGetUserAuthInfoRequest, res: Response, next: 
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: result })
 }
 
-const updateComment = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const updateComment = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { comment } = req.body
 	const { id } = req.params
 
@@ -49,8 +48,8 @@ const updateComment = async (req: IGetUserAuthInfoRequest, res: Response, next: 
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: result })
 }
 
-const deleteComment = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id } = req.params
 
 	if (!user) {

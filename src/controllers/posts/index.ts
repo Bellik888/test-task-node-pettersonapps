@@ -1,11 +1,10 @@
-import { NextFunction, Response } from 'express'
+import { NextFunction, Response, Request } from 'express'
 import { HttpCode } from '../../lib/constants'
 
 import postsRepository from '../../repository/posts'
-import { IGetUserAuthInfoRequest } from '../../types/expressTypes'
 
-const createPost = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const createPost = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const post = req.body.post
 
 	if (!user) {
@@ -28,8 +27,8 @@ const createPost = async (req: IGetUserAuthInfoRequest, res: Response, next: Nex
 		.json({ status: 'success', code: HttpCode.OK, data: { message: 'success', post: result } })
 }
 
-const updatePost = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const updatePost = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id } = req.params
 
 	if (!user) {
@@ -53,8 +52,8 @@ const updatePost = async (req: IGetUserAuthInfoRequest, res: Response, next: Nex
 		.json({ status: 'success', code: HttpCode.OK, data: { message: 'success', post: result } })
 }
 
-const deletePost = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 	const { id } = req.params
 
 	if (!user) {
@@ -76,8 +75,8 @@ const deletePost = async (req: IGetUserAuthInfoRequest, res: Response, next: Nex
 	return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, message: 'DELETED' })
 }
 
-const getAllFriendsPosts = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
-	const user = req.user
+const getAllFriendsPosts = async (req: Request, res: Response, next: NextFunction) => {
+	const user = res.locals.user
 
 	if (!user) {
 		return res
