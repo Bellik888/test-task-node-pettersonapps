@@ -39,7 +39,7 @@ const getUser = (email, password) => __awaiter(void 0, void 0, void 0, function*
 const getToken = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, email } = user;
     const payload = { id, email };
-    const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1d' });
+    const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' });
     return token;
 });
 const setToken = (id, token) => __awaiter(void 0, void 0, void 0, function* () {

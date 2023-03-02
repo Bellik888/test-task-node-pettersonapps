@@ -48,7 +48,8 @@ const guard = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             .status(constants_1.HttpCode.UNAUTHORIZED)
             .json({ status: 'error', code: constants_1.HttpCode.UNAUTHORIZED, message: 'Not authorized' });
     }
-    req.user = user;
+    // res.locals.user = user
+    res.locals.user = user;
     next();
 });
 exports.default = guard;

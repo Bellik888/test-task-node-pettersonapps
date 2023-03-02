@@ -16,7 +16,7 @@ exports.deleteComment = exports.updateComment = exports.createComment = void 0;
 const constants_1 = require("../../lib/constants");
 const comments_1 = __importDefault(require("../../repository/comments"));
 const createComment = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { comment, postId } = req.body;
     if (!user) {
         return res
@@ -34,7 +34,7 @@ const createComment = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 });
 exports.createComment = createComment;
 const updateComment = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { comment } = req.body;
     const { id } = req.params;
     if (!user) {
@@ -53,7 +53,7 @@ const updateComment = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 });
 exports.updateComment = updateComment;
 const deleteComment = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = res.locals.user;
     const { id } = req.params;
     if (!user) {
         return res
