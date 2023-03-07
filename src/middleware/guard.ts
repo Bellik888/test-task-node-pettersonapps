@@ -3,7 +3,9 @@ import { NextFunction, Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
 import { HttpCode } from '../lib/constants'
 
-import repositoryUsers from '../repository/user'
+import Repo from '../repository'
+import User from '../model/User'
+import userService from '../service/user.service'
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || '123'
 
@@ -41,7 +43,7 @@ const guard = async (req: Request, res: Response, next: NextFunction) => {
 
 	const payload = jwt.decode(token) as JwtPayload
 
-	const user: IUser | null = await repositoryUsers.findById(payload.id)
+	const user: IUser | null = await userService.findById(payload.id)
 
 	if (!user || user.token !== token) {
 		return res
