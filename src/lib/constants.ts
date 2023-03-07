@@ -1,8 +1,10 @@
 export const MIN_AGE = 14
 export const MAX_AGE = 75
 export const LIMIT_JSON = 5000
-export const FRIENDS_POSTS_LIMIT = 20
+export const FRIENDS_POSTS_LIMIT = 30
 export const FRIENDS_POSTS_SKIP = 0
+export const FRIENDS_LIMIT = 20
+export const FRIENDS_SKIP = 0
 
 export const HttpCode = {
 	OK: 200,

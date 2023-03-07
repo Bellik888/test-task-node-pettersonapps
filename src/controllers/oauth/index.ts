@@ -1,12 +1,12 @@
 import { IUser } from './../../types/user'
 import { NextFunction, Request, Response } from 'express'
-import { object } from 'joi'
 import passport from 'passport'
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
 import { HttpCode } from '../../lib/constants'
 import authService from '../../service/auth.service'
 
-import repositoryUsers from '../../repository/user'
+import Repo from '../../repository'
+import User from '../../model/User'
 
 interface Profile {
 	email: string
@@ -37,10 +37,10 @@ passport.use(
 					})
 				}
 
-				const user = await repositoryUsers.findByEmail(email)
+				const user = await Repo.findOne(User, { email })
 				if (!user) return
 				const token = await authService.getToken(user)
-				if (token) await authService.setToken(user.id, token)
+				await authService.setToken(user.id, token)
 				userProfile = { ...profile, token }
 				return done(null, userProfile)
 			} catch (error) {
@@ -62,8 +62,6 @@ const authPage = (req: Request, res: Response, next: NextFunction) => {
 }
 
 const getSuccessPage = (req: Request, res: Response, next: NextFunction) => {
-	console.log(userProfile)
-
 	res.render('pages/success', { user: userProfile })
 }
 

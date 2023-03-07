@@ -2,6 +2,8 @@ import { HttpCode } from './../../lib/constants'
 import { NextFunction, Request, Response } from 'express'
 import Joi from 'joi'
 import { Types } from 'mongoose'
+import Comment from '../../model/Comment'
+import Repo from '../../repository'
 
 const createSchema = Joi.object({
 	comment: Joi.string().min(10).max(150).required(),
@@ -35,5 +37,15 @@ export const validateUpdate = async (req: Request, res: Response, next: NextFunc
 	} catch (error: any) {
 		return res.status(400).json({ message: `Field ${error.message.replace(/"/g, '')}` })
 	}
+	next()
+}
+
+export const isAuthor = async (req: Request, res: Response, next: NextFunction) => {
+	const { id } = req.params
+	const { user } = res.locals
+	const comment = await Repo.findById(Comment, id)
+
+	if (!user._id.equals(comment.authorId)) return res.status(404).json({ message: 'you are not author' })
+
 	next()
 }

@@ -6,8 +6,9 @@ export interface IUser extends Document {
 	email: string
 	password: string
 	token?: string | null
-	friends: Types.ObjectId[]
-	incomingFriendsRequests: Types.ObjectId[]
-	outputFriendsRequests: Types.ObjectId[]
+	friends: string[]
+	incomingFriendsRequests: string[]
+	outputFriendsRequests: string[]
 	isValidPassword(arg: string): Promise<boolean>
+	countDocuments(): Promise<number>
 }
