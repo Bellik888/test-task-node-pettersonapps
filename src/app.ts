@@ -13,6 +13,7 @@ import usersRouter from './routes/users'
 import postsRouter from './routes/posts'
 import commentsRouter from './routes/comments'
 import oauthRouter from './routes/oauth'
+import errors from './lib/errors'
 
 const app: Express = express()
 
@@ -40,7 +41,7 @@ app.use((req, res) => {
 	res.status(HttpCode.NOT_FOUND).json({
 		status: 'error',
 		code: HttpCode.NOT_FOUND,
-		message: 'Not found',
+		message: errors.NOT_FOUND,
 	})
 })
 

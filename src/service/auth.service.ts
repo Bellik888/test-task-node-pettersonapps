@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
 
 import User from '../model/User'
-import repositoryUsers from '../repository/user'
 import { IUser } from '../types/user'
+import Repo from '../repository'
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || '123'
 
@@ -14,12 +14,12 @@ type CreateBody = {
 }
 
 const isUserExist = async (email: string) => {
-	const user = await repositoryUsers.findByEmail(email)
+	const user = await Repo.findOne(User, { email })
 	return !!user
 }
 
 const createUser = async (body: CreateBody) => {
-	const { id, name, email, friends } = await User.create(body)
+	const { id, name, email, friends } = await Repo.create(User, body)
 
 	return {
 		id,
@@ -30,7 +30,7 @@ const createUser = async (body: CreateBody) => {
 }
 
 const getUser = async (email: string, password: string) => {
-	const user = await repositoryUsers.findByEmail(email)
+	const user = await Repo.findOne(User, { email })
 
 	const isValidPassword = await user?.isValidPassword(password)
 
@@ -48,11 +48,11 @@ const getToken = async (user: IUser) => {
 }
 
 const setToken = async (id: string, token: string) => {
-	await repositoryUsers.updateToken(id, token)
+	await Repo.updateOne(User, id, { token })
 }
 
 const removeToken = async (id: string) => {
-	await repositoryUsers.removeToken(id)
+	await Repo.updateOne(User, id, { token: null })
 }
 
 export default { createUser, isUserExist, getUser, getToken, setToken, removeToken }
