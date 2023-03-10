@@ -20,6 +20,8 @@ const findById = async (Model: any, id: string) => {
 	return await Model.findById(id).select('-password')
 }
 
+// You can use project or select method to specify fields you need:
+// https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/project/
 const findMany = async (Model: any, options: FindOptions, query?: FindManyQuery) => {
 	const { skip = 0, limit = 0 } = query || {}
 	return await Model.find(options).skip(Number(skip)).limit(Number(limit))

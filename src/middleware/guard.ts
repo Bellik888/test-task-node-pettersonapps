@@ -3,6 +3,7 @@ import { NextFunction, Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
 import { HttpCode } from '../lib/constants'
 
+// Check if u really need some imports
 import Repo from '../repository'
 import User from '../model/User'
 import userService from '../service/user.service'
@@ -50,8 +51,6 @@ const guard = async (req: Request, res: Response, next: NextFunction) => {
 			.status(HttpCode.UNAUTHORIZED)
 			.json({ status: 'error', code: HttpCode.UNAUTHORIZED, message: 'Not authorized' })
 	}
-
-	// res.locals.user = user
 
 	res.locals.user = user
 

@@ -1,5 +1,4 @@
-import pkg, { Types } from 'mongoose'
-const { Schema, model, SchemaTypes } = pkg
+import { Types, Schema, model, SchemaTypes } from 'mongoose'
 
 interface IComment {
 	comment: string

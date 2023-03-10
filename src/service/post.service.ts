@@ -16,6 +16,7 @@ const deletePost = async (postId: string) => {
 }
 
 const getAllFriendsPosts = async (user: IUser, query: FindManyQuery) => {
+	// You can add sortBy/orderBy createdAt or other fields
 	const result = await Repo.findMany(Post, { author: { $in: user.friends } }, query)
 	const total = await Repo.findManyCount(Post, { author: { $in: user.friends } })
 
