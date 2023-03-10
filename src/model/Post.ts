@@ -1,4 +1,6 @@
 import pkg, { Types } from 'mongoose'
+// why do u import pkg and then use destructure assignment?
+// Could it be just import { Types, Schema, model, SchemaTypes } from 'mongoose' ?
 const { Schema, model, SchemaTypes } = pkg
 
 interface IPost {

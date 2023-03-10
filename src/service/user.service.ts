@@ -9,8 +9,7 @@ type FindByBody = {
 }
 
 const findById = async (id: string) => {
-	const user = await Repo.findById(User, id)
-	return user
+	return Repo.findById(User, id)
 }
 
 const findBy = async (user: IUser, body: FindByBody) => {
@@ -19,6 +18,7 @@ const findBy = async (user: IUser, body: FindByBody) => {
 
 	if (!result) return null
 
+	// please, read about project && select methods
 	const users = result.map((friend: IUser) => {
 		const { id, name, friends, nickname } = friend
 		return { id, name, friends, nickname }
@@ -30,8 +30,11 @@ const getFriends = async (user: IUser, query: FindManyQuery) => {
 	const result = await Repo.findMany(User, { _id: { $in: user.friends } }, query)
 	const total = await Repo.findManyCount(User, { _id: { $in: user.friends } })
 
+	// result is an array, so you should change check to !result.length
+	// But I don't think it is necessary, it is okay to get an empty array if user don't have friends
 	if (!result) return null
 
+	// please, read about project && select methods
 	const friends = result.map((friend: IUser) => {
 		const { id, name, friends } = friend
 		return { id, name, friends }
@@ -44,6 +47,8 @@ const sendFriendRequest = async (userId: string, friendId: string) => {
 	try {
 		await Repo.updateOne(User, userId, { $addToSet: { outputFriendsRequests: friendId } })
 		await Repo.updateOne(User, friendId, { $addToSet: { incomingFriendsRequests: userId } })
+		// add a blanc line before return:
+		// https://medium.com/swlh/javascript-best-practices-spaces-2abe910f1a60
 		return true
 	} catch (error: any) {
 		return null

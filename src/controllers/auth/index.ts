@@ -11,9 +11,14 @@ const registration = async (req: Request, res: Response, next: NextFunction) => 
 		if (isUserExist) {
 			return res.status(HttpCode.CONFLICT).json({ code: HttpCode.CONFLICT, message: 'Email os already exist' })
 		}
-		const data = await authService.createUser(req.body)
 
-		res.status(HttpCode.CREATED).json({ code: HttpCode.CREATED, data })
+		// Maybe, user should get token both after registration and log in
+		const user = await authService.createUser(req.body)
+
+		const token = await authService.getToken(user as any)
+		if (token) await authService.setToken(user.id, token)
+
+		res.status(HttpCode.CREATED).json({ code: HttpCode.CREATED, data: { user, token } })
 	} catch (error) {
 		next(error)
 	}
@@ -42,6 +47,9 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = res.locals
 
 		await authService.removeToken(user.id)
+		// You can add const removed = await authService.removeToken(user.id)
+		// and check if (!removed) { throw some error }
+		// but firstly read commend with res.acknowledged
 
 		res.status(HttpCode.OK).json({ code: HttpCode.OK, message: 'SUCCESS' })
 	} catch (error) {

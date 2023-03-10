@@ -13,6 +13,10 @@ type CreateBody = {
 	password?: string
 }
 
+// Use filter param E.g:
+// isUserExist(filter: User): Promise<User>...
+// isUserExist({ email: 'some.email@com', id })
+// the same for getUser
 const isUserExist = async (email: string) => {
 	const user = await Repo.findOne(User, { email })
 	return !!user
@@ -29,6 +33,11 @@ const createUser = async (body: CreateBody) => {
 	}
 }
 
+// This function checks if user password is valid
+// I'd recommend change name to authUser(or smth like) OR create separate functions
+// for get user and auth user
+// P.S getUser should use filter as param getUser(filter: User)
+// authUser can use email/password
 const getUser = async (email: string, password: string) => {
 	const user = await Repo.findOne(User, { email })
 
@@ -40,13 +49,11 @@ const getUser = async (email: string, password: string) => {
 }
 
 const getToken = async (user: IUser) => {
-	const { id, email } = user
-	const payload = { id, email }
-	const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' })
-
-	return token
+	return jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' })
 }
 
+// I'd recommend return Repo.updateOne(...) OR
+// create variable res = Repo.updateOn(...) and return res.acknowledged
 const setToken = async (id: string, token: string) => {
 	await Repo.updateOne(User, id, { token })
 }
